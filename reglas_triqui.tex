@@ -1,0 +1,42 @@
+\documentclass{minimal}
+
+
+\begin{document}
+
+\[
+P(fila, columna, signo, turno)
+\]
+
+
+fila = 3
+
+columna = 3
+
+signo = 3
+
+turno = 2
+
+P = 54
+
+letras chr(256) -- chr(310)
+
+tseitin regla Edgar chr(400) -- chr(899)
+
+tseitin regla Nicolas chr(900) -- chr(1399)
+
+tseitin regla Juan Luis chr(1400) -- chr(1899)
+
+
+$\beta$ codifica que no hay cambio
+
+
+\[
+\beta(x,y,z) \leftrightarrow ( P(x,y,z,0) \to P(x,y,z,1)  )
+\]
+
+\[
+\bigwedge\left(   ( P(x,y,E,0) \wedge P(x,y,O,1)  ) \leftrightarrow (\bigvee( \beta(x',y',z)  ) )    \right)
+\]
+
+
+\end{document}
