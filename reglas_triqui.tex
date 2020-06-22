@@ -38,5 +38,10 @@ $\beta$ codifica que no hay cambio
 \bigwedge\left(   ( P(x,y,E,0) \wedge P(x,y,O,1)  ) \leftrightarrow (\bigvee( \beta(x',y',z)  ) )    \right)
 \]
 
-
+\textbf{Regla - Ganar cuando es posible}
+\[A \leftrightarrow \bigwedge\left(P(x,y,O,0)\wedge P(x+1,y,O,0) \rightarrow P(x+2,y,O,1)\right)\]
+\[B \leftrightarrow \bigwedge\left(P(x,y,O,0)\wedge P(x,y+1,O,0) \rightarrow P(x,y+2,O,1)\right)\]
+\[C \leftrightarrow \bigwedge\left(P(a,a,O,0)\wedge P(a+1,a+1,O,0) \rightarrow P(a+2,a+2,O,1)\right)\]
+\[D \leftrightarrow \bigwedge\left(P(x,y,O,0)\wedge P(x-1,y+1,O,0) \rightarrow P(x-2,y+2,O,1)\right), x+y=2\]
+\[A\wedge B\wedge C\wedge D\]
 \end{document}
