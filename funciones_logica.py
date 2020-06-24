@@ -110,6 +110,60 @@ def Tseitin(T, LetrasProposicionales):
     B = atomo + B
     return B
 
+def TseitinJL(T, LetrasProposicionales):
+    #Dada una formula T, halla una formula T' igual de buena que T en forma normal conjuntiva
+    #Input: T formula como Tree
+    #       LetrasProposicionales, lista de strings
+    #Output: Formula como Tree en forma normal conjuntiva
+    T = elim_doble_negacion(T)
+    A = inorder(T)
+    LetrasProposicionales2 = [chr(x) for x in range(1400, 1899)]
+    L  = []
+    pila = []
+    i = -1
+    s = A [0]
+    while len(A) > 0:
+        if s in LetrasProposicionales and len(pila) > 0 and pila[-1] == "-":
+            i += 1
+            atomo = LetrasProposicionales2[i]
+            pila = pila[:-1]
+            pila.append(atomo)
+            L.append(Tree("=", Tree(atomo,None,None), Tree("-",None, Tree(s, None, None))))
+            A = A[1:]
+            if len(s)>0:
+                s = A[0]
+        elif s == ")":
+            w = pila[-1]
+            o = pila[-2]
+            v = pila[-3]
+            pila = pila[:len(pila) -4]
+            i += 1
+            atomo = LetrasProposicionales2[i]
+            L.append(Tree("=", Tree(atomo, None, None), Tree(o, Tree(v, None, None), Tree(w,None, None))))
+            s = atomo
+        else:
+            pila.append(s)
+            A = A[1:]
+            if len(A)>0:
+                s = A[0]
+    B = ""
+    if i < 0:
+        atomo = pila[-1]
+    else:
+        atomo = LetrasProposicionales2[i]
+    for T in L:
+        if T.right.label == "-":
+            T= Tree("Y", Tree("O", Tree("-", None, T.left), Tree("-", None, T.right.right)), Tree("O", T.left, T.right.right))
+        elif T.right.label == "Y":
+            T= Tree("Y", Tree("Y", Tree("O", T.right.left, Tree("-", None, T.left)), Tree("O", T.right.right, Tree("-", None, T.left))), Tree("O", Tree("O",Tree("-", None, T.right.left), Tree("-", None, T.right.right)), T.left))
+        elif T.right.label == "O":
+            T= Tree("Y", Tree("Y", Tree("O", Tree("-", None, T.right.left), T.left), Tree("O", Tree("-", None, T.right.right), T.left )), Tree("O", Tree("O",T.right.left, T.right.right), Tree("-", None, T.left)))
+        elif T.right.label == ">":
+            T= Tree("Y", Tree("Y", Tree("O", T.right.left, T.left), Tree("O", Tree("-", None, T.right.right), T.left)), Tree("O", Tree("O", Tree("-", None, T.right.left), T.right.right), Tree("-", None, T.left)))
+        B += "Y" + inorder(T)
+    B = atomo + B
+    return B
+
 def forma_clausal(formula):
     # Crea una formula en su forma clausal dada una formula en forma normal conjuntiva
     #Input: formula, formula como Tree en forma normal conjuntiva
