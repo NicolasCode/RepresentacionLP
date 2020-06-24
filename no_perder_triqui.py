@@ -1,17 +1,19 @@
 import funciones_logica as Fun
 
 letras = []
-numfilas = 3
-numcolumnas = 3
-numsignos = 3
-numturnos = 2
+Nfilas = 3
+Ncolumnas = 3
+Nnumeros = 3
+Nturnos = 2
 filas=[0,1,2]
 columnas =[0,1,2]
-for fila in range(numfilas):
-    for columna in range(numcolumnas):
-        for signo in range(numsignos):
-            for turno in range (numturnos):
-                letras.append(Fun.P(fila,columna,signo,turno,numfilas,numcolumnas,numsignos,numturnos))
+
+
+for fila in range(Nfilas):
+    for columna in range(Ncolumnas):
+        for signo in range(Nnumeros):
+            for turno in range (Nturnos):
+                letras.append(Fun.P(fila,columna,signo,turno,Nfilas,Ncolumnas,Nnumeros,Nturnos))
 
 # Parte E: Evitar columna
 inicial=True
@@ -21,15 +23,15 @@ for c in columnas:
         inicial1 = True
         for a in filas:
             if a != f and inicial1:
-                E += Fun.P(a,c,1,0,numfilas, numcolumnas, numsignos, numturnos)
+                E += P(a,c,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             if a != f:
-                 E += Fun.P(a,c,1,0,numfilas, numcolumnas, numsignos, numturnos) + 'Y'
+                 E += P(a,c,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            E += Fun.P(f,c,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>'
+            E += P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
             inicial = False
         else:
-            E += Fun.P(f,c,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>' + 'Y'
+            E += P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
 
 # Parte F: Evitar fila
 inicial=True
@@ -39,15 +41,15 @@ for f in filas:
         inicial1 = True
         for a in columnas:
             if a != c and inicial1:
-                F += Fun.P(f,a,1,0,numfilas, numcolumnas, numsignos, numturnos)
+                F += Fun.P(f,a,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             if a != c:
-                 F += Fun.P(f,a,1,0,numfilas, numcolumnas, numsignos, numturnos) + 'Y'
+                 F += Fun.P(f,a,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            F += Fun.P(f,c,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>'
+            F += Fun.P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
             inicial = False
         else:
-            F += Fun.P(f,c,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>' + 'Y'
+            F += Fun.P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
 
 #Parte G: Evitar columna principal
 inicial=True
@@ -56,14 +58,14 @@ for a in columnas:
     inicial1 = True
     for b in columnas:
         if a != b and inicial1:
-            G += Fun.P(b,b,1,0,numfilas, numcolumnas, numsignos, numturnos)
+            G += Fun.P(b,b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
         if a != c:
-            G += Fun.P(b,b,1,0,numfilas, numcolumnas, numsignos, numturnos) + 'Y'
+            G += Fun.P(b,b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
     if inicial:
-        G += Fun.P(a,a,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>'
+        G += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
         inicial = False
     else:
-        G += Fun.P(a,a,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>' + 'Y'
+        G += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
 
 #Parte H: Evitar columna secundaria
 inicial=True
@@ -72,14 +74,14 @@ for a in columnas:
     inicial1 = True
     for b in columnas:
         if a != b and inicial1:
-            H += Fun.P(b,2-b,1,0,numfilas, numcolumnas, numsignos, numturnos)
+            H += Fun.P(b,2-b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
         if a != c:
-            H += Fun.P(b,2-b,1,0,numfilas, numcolumnas, numsignos, numturnos) + 'Y'
+            H += Fun.P(b,2-b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
     if inicial:
-        H += Fun.P(a,2-a,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>'
+        H += Fun.P(a,2-a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
         inicial = False
     else:
-        H += Fun.P(a,a,2,1,numfilas, numcolumnas, numsignos, numturnos) + '>' + 'Y'
+        H += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
 
 
 
