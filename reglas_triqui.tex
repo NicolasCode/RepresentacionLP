@@ -44,4 +44,22 @@ $\beta$ codifica que no hay cambio
 \[C \leftrightarrow \bigwedge\left(P(a,a,O,0)\wedge P(a+1,a+1,O,0) \rightarrow P(a+2,a+2,O,1)\right)\]
 \[D \leftrightarrow \bigwedge\left(P(x,y,O,0)\wedge P(x-1,y+1,O,0) \rightarrow P(x-2,y+2,O,1)\right), x+y=2\]
 \[A\wedge B\wedge C\wedge D\]
+
+
+\textbf{Regla - No perder}
+
+%$$E \leftrightarrow  \bigwedge_{c\,{\in}\,\mbox{\textsc{columna}}} \left(\left(\left(P(0,c,O,0) \wedge P(1,c,O,0) \right) \rightarrow P(2,c,X,1)\right) \wedge \left(\left( P(1,c,O,0) \wedge P(2,c,O,0) \right) \rightarrow P(0,c,X,1) \right) \wedge $$
+%$$\left(\left(P(0,c,O,0) \wedge P(2,c,O,0)\right) \rightarrow P(1,c,X,1)\right)\right)\right)$$
+
+$$E \leftrightarrow  \left(\bigwedge_{c\,{\in}\,\mbox{\textsc{columna}}} \left( \bigwedge_{f\,{\in}\,\mbox{\textsc{fila}}} \left(\bigwedge_{\alpha \,{\in}\,\mbox{\textsc{fila}}- \{f\}} P(\alpha,c,O,0) \right) \rightarrow P(f,c,X,1)\right)\right) $$
+
+$$F \leftrightarrow  \left(\bigwedge_{f\,{\in}\,\mbox{\textsc{fila}}} \left( \bigwedge_{c\,{\in}\,\mbox{\textsc{columna}}} \left(\bigwedge_{\alpha \,{\in}\,\mbox{\textsc{columna}}- \{c\}} P(f,\alpha,O,0) \right) \rightarrow P(f,c,X,1)\right)\right) $$
+
+%//$$F \leftrightarrow  \bigwedge_{f\,{\in}\,\mbox{\textsc{fila}}} \left(\left(\left(P(f,0,O,0) \wedge P(f,1,O,0) \right) \rightarrow P(f,2,X,1)\right) \wedge \left(\left( P(f,1,O,0) \wedge P(f,2,O,0) \right) \rightarrow P(f,0,X,1) \right) \wedge $$//
+%$$\left(\left(P(f,0,O,0) \wedge P(f,2,O,0)\right) \rightarrow P(f,1,X,1)\right)\right)\right)$$
+
+$$G \leftrightarrow \left( \bigwedge_{\alpha \,{\in}\,\mbox{\textsc{columna}}} \left(\bigwedge_{\beta \,{\in}\,\mbox{\textsc{columna}}- \{\alpha\}} P(\beta,\beta,O,0) \right) \rightarrow P(\alpha,\alpha,X,1)\right) $$
+
+$$H \leftrightarrow \left( \bigwedge_{\alpha \,{\in}\,\mbox{\textsc{columna}}} \left(\bigwedge_{\beta \,{\in}\,\mbox{\textsc{columna}}- \{\alpha\}} P(\beta,2 - \beta,O,0) \right) \rightarrow P(\alpha,2 - \alpha,X,1)\right) $$
+\[E\wedge F\wedge G\wedge H\]
 \end{document}
