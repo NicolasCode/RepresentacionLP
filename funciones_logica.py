@@ -1,6 +1,10 @@
 import re
 
 conectivos = ['O', 'Y', '>', '=']
+Nfilas = 3
+Ncolumnas = 3
+Nnumeros = 3
+Nturnos = 2
 
 class Tree(object):
     def __init__(self, label, left, right):
@@ -358,3 +362,11 @@ def Pinv(codigo, numfilas, numcolumnas, numsignos, numturnos):
     v1, turno = decodifica(v2, numfilas*numcolumnas*numsignos, numturnos)
     fila, columna, signo = decodifica3(v1, numfilas, numcolumnas, numsignos)
     return fila, columna, signo, turno
+
+def Inorderp(f):
+    if f.right == None:
+        return "P" + str(Pinv(f.label, Nfilas, Ncolumnas, Nnumeros, Nturnos))
+    elif f.label == '-':
+        return f.label + Inorderp(f.right)
+    else:
+        return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
