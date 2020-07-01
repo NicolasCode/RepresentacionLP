@@ -163,15 +163,15 @@ def regla4():
             inicial1 = True
             for a in columnas:
                 if a != c and inicial1:
-                    clau = Fun.P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                     inicial1 = False
                 elif a != c:
-                     clau += Fun.P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                     clau += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
             if inicial:
-                F = Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
+                F = P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
                 inicial = False
             else:
-                F += Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
+                F += P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
     #Parte G: Evitar columna principal
     inicial=True
@@ -179,15 +179,15 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = Fun.P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             elif a != b:
-                clau += Fun.P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                clau += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            G = Fun.P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>'
+            G = P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>'
             inicial = False
         else:
-            G += Fun.P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
+            G += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
     #Parte H: Evitar columna secundaria
     inicial=True
@@ -195,15 +195,15 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = Fun.P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             elif a != b:
-                clau += Fun.P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                clau += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            H = Fun.P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
+            H = P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
             inicial = False
         else:
-            H += Fun.P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
+            H += P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
 
     return E + F + 'Y' + G + 'Y' + H + 'Y'
 

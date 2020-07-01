@@ -13,12 +13,11 @@ def interpreta_tablero(tablero):
     inicial = True
     for l in tablero:
         if inicial:
-            letra = P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)
+            letra = [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
             inicial = False
         else:
-            letra += P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + "Y"
+            letra += [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
 
-    letra = formaClausal(letra)
     return letra
 
 def cargar_reglas(tablero):
@@ -27,12 +26,11 @@ def cargar_reglas(tablero):
         reglas = json.load(file)
 
     # rw = list(reglas.keys())
-    # rw = ['regla0', 'regla1', 'regla3', 'regla4', 'regla5', 'regla2']
-    rw = []
+    rw = ['regla0', 'regla1', 'regla3', 'regla4', 'regla5', 'regla2']
+    # rw = []
     print("Trabajando con reglas", rw)
 
     formula = interpreta_tablero(tablero)
-    # formula = []
 
     for r in rw:
         formula += reglas[r]
@@ -78,4 +76,4 @@ tablero = [
 [1, 1, 2]
 ]
 formula = cargar_reglas(tablero)
-# calcular_resultado(formula)
+calcular_resultado(formula)
