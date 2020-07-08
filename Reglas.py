@@ -158,55 +158,54 @@ def regla4():
 
     # Parte F: Evitar fila
     inicial=True
-    F = ""
     for f in filas:
         for c in columnas:
             inicial1 = True
             for a in columnas:
                 if a != c and inicial1:
-                    F += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                     inicial1 = False
-                if a != c:
-                     F += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                elif a != c:
+                     clau += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
             if inicial:
-                F += P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+                F = P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
                 inicial = False
             else:
-                F += P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+                F += P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
     #Parte G: Evitar columna principal
     inicial=True
-    G = ""
     for a in columnas:
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                G += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
-            if a != c:
-                G += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                inicial1 = False
+            elif a != b:
+                clau += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            G += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+            G = P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>'
             inicial = False
         else:
-            G += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+            G += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
     #Parte H: Evitar columna secundaria
     inicial=True
-    H = ""
     for a in columnas:
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                H += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
-            if a != c:
-                H += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                inicial1 = False
+            elif a != b:
+                clau += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            H += P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+            H = P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
             inicial = False
         else:
-            H += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+            H += P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
 
-    return E# + F + 'Y' + G + 'Y' + H + 'Y'
+    return E + F + 'Y' + G + 'Y' + H + 'Y'
 
 def regla5():
     # Parte A: Rellenar columna

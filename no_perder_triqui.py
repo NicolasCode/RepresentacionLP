@@ -23,65 +23,64 @@ for c in columnas:
         inicial1 = True
         for a in filas:
             if a != f and inicial1:
-                E += P(a,c,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = Fun.P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
-            if a != f:
-                 E += P(a,c,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            elif a != f:
+                 clau += Fun.P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            E += P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+            E = Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
             inicial = False
         else:
-            E += P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+            E += Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
 # Parte F: Evitar fila
 inicial=True
-F = ""
 for f in filas:
     for c in columnas:
         inicial1 = True
         for a in columnas:
             if a != c and inicial1:
-                F += Fun.P(f,a,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = Fun.P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
-            if a != c:
-                 F += Fun.P(f,a,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            elif a != c:
+                 clau += Fun.P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
         if inicial:
-            F += Fun.P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+            F = Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
             inicial = False
         else:
-            F += Fun.P(f,c,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+            F += Fun.P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
 #Parte G: Evitar columna principal
 inicial=True
-G = ""
 for a in columnas:
     inicial1 = True
     for b in columnas:
         if a != b and inicial1:
-            G += Fun.P(b,b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
-        if a != c:
-            G += Fun.P(b,b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            clau = Fun.P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+            inicial1 = False
+        elif a != b:
+            clau += Fun.P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
     if inicial:
-        G += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+        G = Fun.P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>'
         inicial = False
     else:
-        G += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+        G += Fun.P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
 #Parte H: Evitar columna secundaria
 inicial=True
-H = ""
 for a in columnas:
     inicial1 = True
     for b in columnas:
         if a != b and inicial1:
-            H += Fun.P(b,2-b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
-        if a != c:
-            H += Fun.P(b,2-b,1,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            clau = Fun.P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+            inicial1 = False
+        elif a != b:
+            clau += Fun.P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
     if inicial:
-        H += Fun.P(a,2-a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>'
+        H = Fun.P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>'
         inicial = False
     else:
-        H += Fun.P(a,a,2,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + '>' + 'Y'
+        H += Fun.P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
 
 
 
@@ -91,4 +90,8 @@ arbol = Fun.String2Tree(regla_ganar,letras)
 tseitin = Fun.TseitinJL(arbol, letras)
 clausal = Fun.forma_clausal(tseitin)
 interpretacion = Fun.DPLLResultado(clausal, letras)
-print(interpretacion)
+#print(interpretacion)
+tree = Fun.String2Tree(H,letras)
+print(Fun.Inorderp(tree))
+
+ #(((P(1, 2, 2, 0)YP(0, 2, 2, 0))>P(2, 2, 1, 1))Y(((P(2, 2, 2, 0)YP(0, 2, 2, 0))>P(1, 2, 1, 1))Y(((P(2, 2, 2, 0)YP(1, 2, 2, 0))>P(0, 2, 1, 1))Y(((P(1, 1, 2, 0)YP(0, 1, 2, 0))>P(2, 1, 1, 1))Y(((P(2, 1, 2, 0)YP(0, 1, 2, 0))>P(1, 1, 1, 1))Y(((P(2, 1, 2, 0)YP(1, 1, 2, 0))>P(0, 1, 1, 1))Y(((P(1, 0, 2, 0)YP(0, 0, 2, 0))>P(2, 0, 1, 1))Y(((P(2, 0, 2, 0)YP(0, 0, 2, 0))>P(1, 0, 1, 1))Y((P(2, 0, 2, 0)YP(1, 0, 2, 0))>P(0, 0, 1, 1))))))))))
