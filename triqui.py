@@ -1,4 +1,4 @@
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import dash
 from dash.dependencies import State, Input, Output
 import dash_core_components as dcc
@@ -76,11 +76,13 @@ app.layout = dbc.Container(fluid=True, children=[
                 dbc.Col(dbc.Button(ficha['11'],
                                     id="boton-11",
                                     style={'font-size':'30px'}
-                                    )),
-                dbc.Col(html.H1(children = ficha['12'],
-                    style = {'color': colors['text']},
-                    id='boton-12'
-                    )),
+                                    )
+                        ),
+                dbc.Col(dbc.Button(ficha['12'],
+                                    id="boton-12",
+                                    style = {'font-size':'30px'}
+                                    )
+                        ),
                 dbc.Col(html.H1(children = ficha['13'],
                     style = {'color': colors['text']}
                     ))
@@ -119,6 +121,9 @@ app.layout = dbc.Container(fluid=True, children=[
     ])
 ])
 
+
+###############################################
+# BOTON-11
 # Pone una X en el boton-11
 @app.callback(Output('boton-11', 'children'), [Input('boton-11', 'n_clicks')])
 def on_button_click(n):
@@ -132,7 +137,7 @@ def on_button_change(t):
     if t == 'X':
         return True
 # Cambia etiqueta del estado del computador
-@app.callback(Output('comp_status', 'children'), [Input('boton-11', 'n_clicks')])
+@app.callback(Output('comp_status', 'children'), [Input('boton-11', 'disabled')])
 def on_button_disabled(dis):
     if dis:
         return 'Computando jugada...'
