@@ -135,7 +135,52 @@ def regla3():
 
     return reg
 
+# Esta regla indica que se deben bloquear las oportunidades de ganar del otro jugador
 def regla4():
+    # Crear restriccion de no tomar en cuenta la regla si es posible ganar
+    # Parte A: Verificar columnas
+    inicial = True
+    for f in range(Nfilas):
+        for c in range(Ncolumnas):
+            if inicial:
+                A = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                inicial = False
+            else:
+                A += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+
+    # Parte B: Verificar filas
+    inicial = True
+    for f in range(Nfilas):
+        for c in range(Ncolumnas):
+            if inicial:
+                B = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                inicial = False
+            else:
+                B += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+
+    # Parte C: Verificar diagonal principal
+    inicial = True
+    for a in range(Nfilas):
+        if inicial:
+            C = P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            inicial = False
+        else:
+            C += P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+
+    # Parte D: Verificar diagonal secundaria
+    inicial = True
+    for f in range(Nfilas):
+        c = 2-f
+        if inicial:
+            D = P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            inicial = False
+        else:
+            D += P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+
+    restriccion = A + B + 'O' + C + 'O' + D + 'O-'
+    
+    # Se crean las instrucciones de verificar las oportunidades del otro jugador
+    
     # Parte E: Evitar columna
     inicial=True
     columnas = range(Ncolumnas)
@@ -146,7 +191,7 @@ def regla4():
             alfas = [x for x in filas if x != f]
             for a in alfas:
                 if inicial1:
-                    clau = P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                    clau = P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
                     inicial1 = False
                 else:
                      clau += P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -163,7 +208,7 @@ def regla4():
             inicial1 = True
             for a in columnas:
                 if a != c and inicial1:
-                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
                     inicial1 = False
                 elif a != c:
                      clau += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -179,7 +224,7 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
                 inicial1 = False
             elif a != b:
                 clau += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -195,7 +240,7 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
                 inicial1 = False
             elif a != b:
                 clau += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -207,6 +252,7 @@ def regla4():
 
     return E + F + 'Y' + G + 'Y' + H + 'Y'
 
+# Esta regla indica que se debe ganar siempre que sea posible
 def regla5():
     # Parte A: Rellenar columna
     inicial = True
@@ -293,7 +339,7 @@ def actualizar_dict(
 reglas = {}
 letrasProposicionalesA = [chr(x) for x in range(256, 400)]
 letrasB_inicial = 400
-rango = 350
+rango = 1250
 
 reglas_seleccionadas = [0, 1, 2, 3, 4, 5]
 # reglas_seleccionadas = [0, 1, 2]
