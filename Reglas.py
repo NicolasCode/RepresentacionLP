@@ -191,7 +191,7 @@ def regla4():
             alfas = [x for x in filas if x != f]
             for a in alfas:
                 if inicial1:
-                    clau = P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
+                    clau = P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                     inicial1 = False
                 else:
                      clau += P(a,c,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -208,7 +208,7 @@ def regla4():
             inicial1 = True
             for a in columnas:
                 if a != c and inicial1:
-                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
+                    clau = P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                     inicial1 = False
                 elif a != c:
                      clau += P(f,a,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -224,7 +224,7 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
+                clau = P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             elif a != b:
                 clau += P(b,b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -240,7 +240,7 @@ def regla4():
         inicial1 = True
         for b in columnas:
             if a != b and inicial1:
-                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + restriccion + 'Y'
+                clau = P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos)
                 inicial1 = False
             elif a != b:
                 clau += P(b,2-b,2,0,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
@@ -250,7 +250,7 @@ def regla4():
         else:
             H += P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
 
-    return E + F + 'Y' + G + 'Y' + H + 'Y'
+    return E + F + 'Y' + G + 'Y' + H + 'Y' + restriccion + '>'
 
 # Esta regla indica que se debe ganar siempre que sea posible
 def regla5():
@@ -339,7 +339,7 @@ def actualizar_dict(
 reglas = {}
 letrasProposicionalesA = [chr(x) for x in range(256, 400)]
 letrasB_inicial = 400
-rango = 1250
+rango = 350
 
 reglas_seleccionadas = [0, 1, 2, 3, 4, 5]
 # reglas_seleccionadas = [0, 1, 2]
