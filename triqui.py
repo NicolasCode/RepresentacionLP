@@ -125,24 +125,15 @@ app.layout = dbc.Container(fluid=True, children=[
 ###############################################
 # BOTON-11
 # Pone una X en el boton-11
-@app.callback(Output('boton-11', 'children'), [Input('boton-11', 'n_clicks')])
+@app.callback([Output('boton-11', 'children'),
+Output('boton-11', 'disabled'),
+Output('comp_status', 'children')
+], [Input('boton-11', 'n_clicks')])
 def on_button_click(n):
     if n is None:
-        return '_'
+        return '_', False, 'Computador en espera'
     else:
-        return 'X'
-# Desactiva el boton-11
-@app.callback(Output('boton-11', 'disabled'), [Input('boton-11', 'children')])
-def on_button_change(t):
-    if t == 'X':
-        return True
-# Cambia etiqueta del estado del computador
-@app.callback(Output('comp_status', 'children'), [Input('boton-11', 'disabled')])
-def on_button_disabled(dis):
-    if dis:
-        return 'Computando jugada...'
-    else:
-        return 'Computador en espera'
+        return 'X', True, 'Computando jugada...'
 
 if __name__ == '__main__':
     app.run_server(debug=True)
