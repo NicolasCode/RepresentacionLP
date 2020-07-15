@@ -5,35 +5,9 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import numpy as np
-import base64
+from Logica import *
 
-# values = [['a11', 'a21', 'a31'], #1st col
-#             ['a12', 'a22', 'a32'], #1st col
-#             ['a13', 'a23', 'a33'], #1st col
-#             ]
-#
-# fig = go.Figure(data=[go.Table(
-#   columnorder = [1,2,3],
-#   columnwidth = [10,10,10],
-#   # header = dict(
-#   #   values = [['<b>EXPENSES</b><br>as of July 2017'],
-#   #                 ['<b>DESCRIPTION</b>'],
-#   #                 ['<b>Otra</b>']],
-#   #   line_color='darkslategray',
-#   #   fill_color='royalblue',
-#   #   align=['center','center','center'],
-#   #   font=dict(color='white', size=12),
-#   #   height=40
-#   # ),
-#   cells=dict(
-#     values=values,
-#     line_color='darkslategray',
-#     fill=dict(color=['paleturquoise', 'white']),
-#     align=['left', 'center'],
-#     font_size=12,
-#     height=30)
-#     )
-# ])
+tablero = tablero_inicial()
 
 # triqui = dash.Dash()
 app = dash.Dash(external_stylesheets=[dbc.themes.LUX])
@@ -49,8 +23,6 @@ ficha = {}
 for i in range(3):
     for j in range(3):
         ficha[str(i + 1) + str(j + 1)] = '_'
-
-ficha['22'] = 'O'
 
 app.layout = dbc.Container(fluid=True, children=[
     html.Br(),
@@ -123,8 +95,8 @@ app.layout = dbc.Container(fluid=True, children=[
     html.Br(),
     dbc.Row([
         dbc.Col('Computador en espera', id='comp_status'),
-        dbc.Col(''),
-        dbc.Col('')
+        dbc.Col('', id='casillas'),
+        dbc.Col('', id='tablero')
     ])
 ])
 
@@ -132,98 +104,134 @@ app.layout = dbc.Container(fluid=True, children=[
 ###############################################
 # BOTON-11
 # Pone una X en el boton-11
-@app.callback([Output('boton-11', 'children'),
+@app.callback([Output('boton-11', 'color'),
 Output('boton-11', 'disabled'),#
 #Output('comp_status', 'children')
 ], [Input('boton-11', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False#, 'Computador en espera'
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True#, 'Computando jugada...'
+        tablero[0, 0] = 2
+        return 'primary', True#, 'Computando jugada...'
 # BOTON-12
-@app.callback([Output('boton-12', 'children'),
+@app.callback([Output('boton-12', 'color'),
 Output('boton-12', 'disabled')#,
 #Output('comp_status', 'children')
 ], [Input('boton-12', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False#, 'Computador en espera'
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True#, 'Computando jugada...'
+        tablero[0, 1] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-13
-@app.callback([Output('boton-13', 'children'),
+@app.callback([Output('boton-13', 'color'),
 Output('boton-13', 'disabled')],
 [Input('boton-13', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[0, 2] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-21
-@app.callback([Output('boton-21', 'children'),
+@app.callback([Output('boton-21', 'color'),
 Output('boton-21', 'disabled')],
 [Input('boton-21', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[1, 0] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-22
-@app.callback([Output('boton-22', 'children'),
+@app.callback([Output('boton-22', 'color'),
 Output('boton-22', 'disabled')],
 [Input('boton-22', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[1, 1] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-23
-@app.callback([Output('boton-23', 'children'),
+@app.callback([Output('boton-23', 'color'),
 Output('boton-23', 'disabled')],
 [Input('boton-23', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[1, 2] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-31
-@app.callback([Output('boton-31', 'children'),
+@app.callback([Output('boton-31', 'color'),
 Output('boton-31', 'disabled')],
 [Input('boton-31', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[2, 0] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-32
-@app.callback([Output('boton-32', 'children'),
+@app.callback([Output('boton-32', 'color'),
 Output('boton-32', 'disabled')],
 [Input('boton-32', 'n_clicks')])
 def on_button_click(n):
+
+    global tablero
+
     if n is None:
-        return '_', False
+        return 'secondary', False#, 'Computador en espera'
     else:
-        return 'X', True
+        tablero[2, 1] = 2
+        return 'primary', True#, 'Computando jugada...'
 
 # BOTON-33
-@app.callback([Output('boton-33', 'children'),
+@app.callback([Output('boton-33', 'color'),
 Output('boton-33', 'disabled')],
 [Input('boton-33', 'n_clicks')])
 def on_button_click(n):
-    if n is None:
-        return '_', False
-    else:
-        return 'X', True
 
-@app.callback([Output('comp_status', 'children')
-], [Input('boton-11', 'n_clicks'),
+    global tablero
+
+    if n is None:
+        return 'secondary', False#, 'Computador en espera'
+    else:
+        tablero[2, 2] = 2
+        return 'primary', True#, 'Computando jugada...'
+
+@app.callback(Output('comp_status', 'children'),
+[Input('boton-11', 'n_clicks'),
 Input('boton-12', 'n_clicks'),
 Input('boton-13', 'n_clicks'),
 Input('boton-21', 'n_clicks'),
@@ -254,6 +262,34 @@ def frase_final(a,b,c,d,e,f,g,h,i):
         return ['Computando Jugada...']
     else:
         return ['Computador en espera']
+
+@app.callback([Output('tablero', 'children'),
+Output('boton-11', 'children'),
+Output('boton-12', 'children'),
+Output('boton-13', 'children'),
+Output('boton-21', 'children'),
+Output('boton-22', 'children'),
+Output('boton-23', 'children'),
+Output('boton-31', 'children'),
+Output('boton-32', 'children'),
+Output('boton-33', 'children'),
+],
+[Input('comp_status', 'children')])
+def computa_jugada(estado):
+
+    global tablero
+
+    if estado == ['Computando Jugada...']:
+        if not triqui(tablero):
+            tablero = jugar(tablero)
+        return "OK", tablero[0,0], tablero[0,1], tablero[0,2],\
+               tablero[1,0], tablero[1,1], tablero[1,2],\
+               tablero[2,0], tablero[2,1], tablero[2,2]
+    else:
+        return '', tablero[0,0], tablero[0,1], tablero[0,2],\
+               tablero[1,0], tablero[1,1], tablero[1,2],\
+               tablero[2,0], tablero[2,1], tablero[2,2]
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -2,6 +2,7 @@ import json
 from DPLL import *
 from Codificacion import *
 from FNC import *
+import numpy as np
 
 Nfilas = 3
 Ncolumnas = 3
@@ -11,12 +12,21 @@ Nturnos = 2
 
 def interpreta_tablero(tablero):
     inicial = True
-    for l in tablero:
-        if inicial:
-            letra = [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
-            inicial = False
-        else:
-            letra += [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
+
+    # for l in tablero:
+    #     if inicial:
+    #         letra = [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
+    #         inicial = False
+    #     else:
+    #         letra += [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
+
+    for i in range(3):
+        for j in range(3):
+            if inicial:
+                letra = [[P(i, j, tablero[i, j], 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
+                inicial = False
+            else:
+                letra += [[P(i, j, tablero[i, j], 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
 
     return letra
 
@@ -57,23 +67,35 @@ def calcular_resultado(formula):
                 else:
                     print("Oops!", i, fila)
 
-    imprime(resultado_turno0)
+    #imprime(resultado_turno0)
     imprime(resultado_turno1)
+    resultado = np.matrix([[0]*3]*3)
+    for l in resultado_turno1:
+        resultado[l[0], l[1]] = l[2]
 
-# 0 0 0
-# 0 2 0
-# 0 1 1
+    print(resultado)
 
-tablero = [
-[0, 0, 1],
-[0, 1, 1],
-[0, 2, 0],
-[1, 0, 2],
-[1, 1, 2],
-[1, 2, 0],
-[2, 0, 0],
-[2, 1, 0],
-[2, 2, 0]
-]
-formula = cargar_reglas(tablero)
-calcular_resultado(formula)
+    return resultado
+
+def tablero_inicial():
+    # Inicializamos el tablero
+    # tablero = [
+    # [0, 0, 0],
+    # [0, 1, 0],
+    # [0, 2, 0],
+    # [1, 0, 0],
+    # [1, 1, 0],
+    # [1, 2, 0],
+    # [2, 0, 0],
+    # [2, 1, 0],
+    # [2, 2, 0]
+    # ]
+    #
+    # return tablero
+
+    return np.matrix([[0]*3]*3)
+
+def jugar(tablero):
+    # Pide al computador que haga su jugada dado un tablero
+    formula = cargar_reglas(tablero)
+    return calcular_resultado(formula)
