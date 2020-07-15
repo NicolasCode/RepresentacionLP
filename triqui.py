@@ -83,31 +83,38 @@ app.layout = dbc.Container(fluid=True, children=[
                                     style = {'font-size':'30px'}
                                     )
                         ),
-                dbc.Col(html.H1(children = ficha['13'],
-                    style = {'color': colors['text']}
-                    ))
+                dbc.Col(dbc.Button(ficha['13'],
+                                    id="boton-13",
+                                    style = {'font-size':'30px'}
+                                    ))
             ]),
             dbc.Row([
-                dbc.Col(html.H1(children = ficha['21'],
-                    style = {'color': colors['text']}
-                    )),
-                dbc.Col(html.H1(children = ficha['22'],
-                    style = {'color': colors['text']}
-                    )),
-                dbc.Col(html.H1(children = ficha['23'],
-                    style = {'color': colors['text']}
-                    ))
+                dbc.Col(dbc.Button(ficha['21'],
+                                    id="boton-21",
+                                    style = {'font-size':'30px'}
+                                    )),
+                dbc.Col(dbc.Button(ficha['22'],
+                                    id="boton-22",
+                                    style = {'font-size':'30px'}
+                                    )),
+                dbc.Col(dbc.Button(ficha['23'],
+                                    id="boton-23",
+                                    style = {'font-size':'30px'}
+                                    ))
             ]),
             dbc.Row([
-                dbc.Col(html.H1(children = ficha['31'],
-                    style = {'color': colors['text']}
-                    )),
-                dbc.Col(html.H1(children = ficha['32'],
-                    style = {'color': colors['text']}
-                    )),
-                dbc.Col(html.H1(children = ficha['33'],
-                    style = {'color': colors['text']}
-                    ))
+                dbc.Col(dbc.Button(ficha['31'],
+                                    id="boton-31",
+                                    style = {'font-size':'30px'}
+                                    )),
+                dbc.Col(dbc.Button(ficha['32'],
+                                    id="boton-32",
+                                    style = {'font-size':'30px'}
+                                    )),
+                dbc.Col(dbc.Button(ficha['33'],
+                                    id="boton-33",
+                                    style = {'font-size':'30px'}
+                                    ))
             ])
         ]),
         dbc.Col('')
@@ -126,14 +133,127 @@ app.layout = dbc.Container(fluid=True, children=[
 # BOTON-11
 # Pone una X en el boton-11
 @app.callback([Output('boton-11', 'children'),
-Output('boton-11', 'disabled'),
-Output('comp_status', 'children')
+Output('boton-11', 'disabled'),#
+#Output('comp_status', 'children')
 ], [Input('boton-11', 'n_clicks')])
 def on_button_click(n):
     if n is None:
-        return '_', False, 'Computador en espera'
+        return '_', False#, 'Computador en espera'
     else:
-        return 'X', True, 'Computando jugada...'
+        return 'X', True#, 'Computando jugada...'
+# BOTON-12
+@app.callback([Output('boton-12', 'children'),
+Output('boton-12', 'disabled')#,
+#Output('comp_status', 'children')
+], [Input('boton-12', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False#, 'Computador en espera'
+    else:
+        return 'X', True#, 'Computando jugada...'
+
+# BOTON-13
+@app.callback([Output('boton-13', 'children'),
+Output('boton-13', 'disabled')],
+[Input('boton-13', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-21
+@app.callback([Output('boton-21', 'children'),
+Output('boton-21', 'disabled')],
+[Input('boton-21', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-22
+@app.callback([Output('boton-22', 'children'),
+Output('boton-22', 'disabled')],
+[Input('boton-22', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-23
+@app.callback([Output('boton-23', 'children'),
+Output('boton-23', 'disabled')],
+[Input('boton-23', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-31
+@app.callback([Output('boton-31', 'children'),
+Output('boton-31', 'disabled')],
+[Input('boton-31', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-32
+@app.callback([Output('boton-32', 'children'),
+Output('boton-32', 'disabled')],
+[Input('boton-32', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+# BOTON-33
+@app.callback([Output('boton-33', 'children'),
+Output('boton-33', 'disabled')],
+[Input('boton-33', 'n_clicks')])
+def on_button_click(n):
+    if n is None:
+        return '_', False
+    else:
+        return 'X', True
+
+@app.callback([Output('comp_status', 'children')
+], [Input('boton-11', 'n_clicks'),
+Input('boton-12', 'n_clicks'),
+Input('boton-13', 'n_clicks'),
+Input('boton-21', 'n_clicks'),
+Input('boton-22', 'n_clicks'),
+Input('boton-23', 'n_clicks'),
+Input('boton-31', 'n_clicks'),
+Input('boton-32', 'n_clicks'),
+Input('boton-33', 'n_clicks')
+])
+def frase_final(a,b,c,d,e,f,g,h,i):
+    if a is not None:
+        return ['Computando Jugada...']
+    elif b is not None:
+        return ['Computando Jugada...']
+    elif c is not None:
+        return ['Computando Jugada...']
+    elif d is not None:
+        return ['Computando Jugada...']
+    elif e is not None:
+        return ['Computando Jugada...']
+    elif f is not None:
+        return ['Computando Jugada...']
+    elif g is not None:
+        return ['Computando Jugada...']
+    elif h is not None:
+        return ['Computando Jugada...']
+    elif i is not None:
+        return ['Computando Jugada...']
+    else:
+        return ['Computador en espera']
 
 if __name__ == '__main__':
     app.run_server(debug=True)
