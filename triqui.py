@@ -280,8 +280,16 @@ def computa_jugada(estado):
     global tablero
 
     if estado == ['Computando Jugada...']:
-        if not triqui(tablero):
-            tablero = jugar(tablero)
+        antiguo_tablero = tablero
+        tablero = jugar(tablero)
+        if len(tablero) == 0:
+            cambio = False
+            for fila in range(3):
+                for columna in range(3):
+                    if not cambio and antiguo_tablero[fila,columna]==0:
+                        antiguo_tablero[fila,columna] = 1
+                        cambio = True
+            tablero = antiguo_tablero
         return "OK", tablero[0,0], tablero[0,1], tablero[0,2],\
                tablero[1,0], tablero[1,1], tablero[1,2],\
                tablero[2,0], tablero[2,1], tablero[2,2]

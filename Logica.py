@@ -53,26 +53,28 @@ def calcular_resultado(formula):
 
     print(S)
     # print(I)
-    resultado_turno0 = []
-    resultado_turno1 = []
-    letras = [chr(x) for x in range(256, 311)]
-    for i in I.keys():
-        if i in letras:
-            if I[i] == 1:
-                fila = list(Pinv(i, Nfilas, Ncolumnas, Nnumeros, Nturnos))
-                if fila[3] == 0:
-                    resultado_turno0.append(fila)
-                elif fila[3] == 1:
-                    resultado_turno1.append(fila)
-                else:
-                    print("Oops!", i, fila)
+    if S != 'Insatisfacible':
+        resultado_turno0 = []
+        resultado_turno1 = []
+        letras = [chr(x) for x in range(256, 311)]
+        for i in I.keys():
+            if i in letras:
+                if I[i] == 1:
+                    fila = list(Pinv(i, Nfilas, Ncolumnas, Nnumeros, Nturnos))
+                    if fila[3] == 0:
+                        resultado_turno0.append(fila)
+                    elif fila[3] == 1:
+                        resultado_turno1.append(fila)
+                    else:
+                        print("Oops!", i, fila)
 
-    #imprime(resultado_turno0)
-    imprime(resultado_turno1)
-    resultado = np.matrix([[0]*3]*3)
-    for l in resultado_turno1:
-        resultado[l[0], l[1]] = l[2]
-
+        #imprime(resultado_turno0)
+        imprime(resultado_turno1)
+        resultado = np.matrix([[0]*3]*3)
+        for l in resultado_turno1:
+            resultado[l[0], l[1]] = l[2]
+    else:
+        resultado = []
     print(resultado)
 
     return resultado
