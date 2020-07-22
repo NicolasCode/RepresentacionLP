@@ -340,13 +340,14 @@ def regla_ganador():
     #Parte D: Ganador por diagonal secundaria
     inicial = True
     for n in range (1,3):
-        for in range (Nturnos):
+        for t in range (Nturnos):
             if inicial:
                 D = P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                inicial = False
             else:
                 D += P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
 
-
+    return A + B + 'O' + C + 'O' + D + 'O'
 def actualizar_dict(
         r:int,
         letrasB_inicial:int,
