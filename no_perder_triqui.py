@@ -82,16 +82,27 @@ for a in columnas:
     else:
         H += Fun.P(a,2-a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau +  '>' + 'Y'
 
+def regla_ganador():
+    inicial = True
+    for n in range (1,3):
+        for t in range (Nturnos):
+            if inicial:
+                D = Fun.P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + Fun.P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + Fun.P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                inicial = False
+            else:
+                D += Fun.P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + Fun.P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + Fun.P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
 
+    return D
 
 # Regla completa y solucion
-regla_ganar = E + F + 'Y' + G + 'Y' + H + 'Y'
-arbol = Fun.String2Tree(regla_ganar,letras)
-tseitin = Fun.TseitinJL(arbol, letras)
-clausal = Fun.forma_clausal(tseitin)
-interpretacion = Fun.DPLLResultado(clausal, letras)
+#regla_ganar = E + F + 'Y' + G + 'Y' + H + 'Y'
+#regla_ganar = regla_ganador()
+#arbol = Fun.String2Tree(regla_ganar,letras)
+#tseitin = Fun.TseitinJL(arbol, letras)
+#clausal = Fun.forma_clausal(tseitin)
+#interpretacion = Fun.DPLLResultado(clausal, letras)
 #print(interpretacion)
-tree = Fun.String2Tree(H,letras)
+tree = Fun.String2Tree(regla_ganador(),letras)
 print(Fun.Inorderp(tree))
 
  #(((P(1, 2, 2, 0)YP(0, 2, 2, 0))>P(2, 2, 1, 1))Y(((P(2, 2, 2, 0)YP(0, 2, 2, 0))>P(1, 2, 1, 1))Y(((P(2, 2, 2, 0)YP(1, 2, 2, 0))>P(0, 2, 1, 1))Y(((P(1, 1, 2, 0)YP(0, 1, 2, 0))>P(2, 1, 1, 1))Y(((P(2, 1, 2, 0)YP(0, 1, 2, 0))>P(1, 1, 1, 1))Y(((P(2, 1, 2, 0)YP(1, 1, 2, 0))>P(0, 1, 1, 1))Y(((P(1, 0, 2, 0)YP(0, 0, 2, 0))>P(2, 0, 1, 1))Y(((P(2, 0, 2, 0)YP(0, 0, 2, 0))>P(1, 0, 1, 1))Y((P(2, 0, 2, 0)YP(1, 0, 2, 0))>P(0, 0, 1, 1))))))))))

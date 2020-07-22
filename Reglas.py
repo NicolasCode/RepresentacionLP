@@ -178,9 +178,9 @@ def regla4():
             D += P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
 
     restriccion = A + B + 'O' + C + 'O' + D + 'O-'
-    
+
     # Se crean las instrucciones de verificar las oportunidades del otro jugador
-    
+
     # Parte E: Evitar columna
     inicial=True
     columnas = range(Ncolumnas)
@@ -218,7 +218,7 @@ def regla4():
             else:
                 F += P(f,c,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
-    #Parte G: Evitar columna principal
+    #Parte G: Evitar diagonal principal
     inicial=True
     for a in columnas:
         inicial1 = True
@@ -234,7 +234,7 @@ def regla4():
         else:
             G += P(a,a,1,1,Nfilas, Ncolumnas, Nnumeros, Nturnos) + clau + '>' + 'Y'
 
-    #Parte H: Evitar columna secundaria
+    #Parte H: Evitar diagonal secundaria
     inicial=True
     for a in columnas:
         inicial1 = True
@@ -295,6 +295,57 @@ def regla5():
 
     # Regla completa y solucion
     return A + B + 'Y' + C + 'Y' + D + 'Y'
+
+#Esta regla es verdadera si existe algún ganador
+def regla_ganador():
+    #Parte A: Ganador por fila
+    inicial = True
+    for f in range(Nfilas):
+        for n in range(1,3):
+            for t in range(Nturnos):
+                if inicial:
+                    A = P(f,(f+2)%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + P(f,(f+1)%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(f,f%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                    inicial = False
+                else:
+                    A += P(f,(f+2)%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + P(f,(f+1)%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(f,f%3,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
+
+    #Parte B: Ganador por columna
+    inicial = True
+    for c in range(Ncolumnas):
+        for n in range(1,3):
+            for t in range(Nturnos):
+                if inicial:
+                    B = P((c+2)%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + P((c+1)%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(c%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                    inicial = False
+                else:
+                    B += P((c+2)%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + P((c+1)%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(c%3,c,n,t,Nfilas,Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
+
+    #Parte C: Ganador por diagonal principal
+    inicial = True
+    for n in range (1,3):
+        for t in range (Nturnos):
+            inicial1 = True
+            for f in range(Nfilas):
+                if inicial1:
+                    clau = P(f,f,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos)
+                    inicial1 = False
+                else:
+                    clau += P(f,f,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            if inicial:
+                C = clau
+                inicial = False
+            else:
+                C += clau + 'O'
+
+    #Parte D: Ganador por diagonal secundaria
+    inicial = True
+    for n in range (1,3):
+        for in range (Nturnos):
+            if inicial:
+                D = P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            else:
+                D += P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
+
 
 def actualizar_dict(
         r:int,
