@@ -184,7 +184,7 @@ def tablero2interpretacion(tablero, turno):
             interps[P(f,c,tablero[f,c],turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 1
             interps[P(f,c,tablero[f,c],1-turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 0
             for o in [a for a in range(Nnumeros) if a != tablero[f,c]]:
-                print(f,c,o,turno)
+                #print(f,c,o,turno)
                 interps[P(f,c,o,turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 0
                 interps[P(f,c,o,1-turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 0
     return interps
@@ -217,3 +217,10 @@ def jugar(tablero):
     # Pide al computador que haga su jugada dado un tablero
     formula = cargar_reglas(tablero)
     return calcular_resultado(formula)
+
+def buscar_jugada(tablero1,tablero2):
+    for fila in range(3):
+        for columna in range(3):
+            if tablero1[fila,columna] != tablero2[fila,columna]:
+                return str(fila) + str(columna)
+    return ''
