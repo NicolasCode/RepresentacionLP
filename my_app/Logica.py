@@ -1,7 +1,7 @@
 import json
-from DPLL import *
-from Codificacion import *
-from FNC import *
+from my_app.DPLL import *
+from my_app.Codificacion import *
+from my_app.FNC import *
 import numpy as np
 
 Nfilas = 3
@@ -59,13 +59,13 @@ def interpreta_tablero(tablero):
 
 def cargar_reglas(tablero):
     # Cargando reglas
-    with open('reglas.json', 'r') as file:
+    with open('my_app/reglas.json', 'r') as file:
         reglas = json.load(file)
 
     # rw = list(reglas.keys())
     rw = ['regla0', 'regla1', 'regla3', 'regla4', 'regla5', 'regla2']
     # rw = []
-    print("Trabajando con reglas", rw)
+    # print("Trabajando con reglas", rw)
 
     formula = interpreta_tablero(tablero)
 
@@ -78,7 +78,7 @@ def calcular_resultado(formula):
 
     S, I = DPLL(formula, {})
 
-    print(S)
+    # print(S)
     # print(I)
     if S != 'Insatisfacible':
         resultado_turno0 = []
@@ -102,25 +102,11 @@ def calcular_resultado(formula):
             resultado[l[0], l[1]] = l[2]
     else:
         resultado = []
-    print(resultado)
+    # print(resultado)
 
     return resultado
 
 def tablero_inicial():
-    # Inicializamos el tablero
-    # tablero = [
-    # [0, 0, 0],
-    # [0, 1, 0],
-    # [0, 2, 0],
-    # [1, 0, 0],
-    # [1, 1, 0],
-    # [1, 2, 0],
-    # [2, 0, 0],
-    # [2, 1, 0],
-    # [2, 2, 0]
-    # ]
-    #
-    # return tablero
 
     return np.matrix([[0]*3]*3)
 
@@ -208,12 +194,12 @@ def V_I(A, I):
     else:
         print("Creo que no conozco el conectivo " + str(A.label))
 
-def triqui(tablero, turno):
+def hay_triqui(tablero, turno):
     interpretacion = tablero2interpretacion(tablero, turno)
     formula = String2Tree(regla_ganador())
     return V_I(formula,interpretacion)
 
-def jugar(tablero):
+def jugar_dpll(tablero):
     # Pide al computador que haga su jugada dado un tablero
     formula = cargar_reglas(tablero)
     return calcular_resultado(formula)
