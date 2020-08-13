@@ -63,9 +63,10 @@ def cargar_reglas(tablero):
         reglas = json.load(file)
 
     # rw = list(reglas.keys())
-    rw = ['regla0', 'regla1', 'regla3', 'regla4', 'regla5', 'regla2']
+    # rw = ['regla0', 'regla1', 'regla2', 'regla3', 'regla4', 'regla5']
+    rw = ['regla0', 'regla1', 'regla2', 'regla3', 'regla4']
     # rw = []
-    # print("Trabajando con reglas", rw)
+    print("Trabajando con reglas", rw)
 
     formula = interpreta_tablero(tablero)
 
@@ -78,7 +79,7 @@ def calcular_resultado(formula):
 
     S, I = DPLL(formula, {})
 
-    # print(S)
+    print(S)
     # print(I)
     if S != 'Insatisfacible':
         resultado_turno0 = []

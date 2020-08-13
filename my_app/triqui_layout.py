@@ -1,5 +1,6 @@
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+import dash_core_components as dcc
 
 triqui_layout = dbc.Container(children=[
     dbc.Row([
@@ -62,9 +63,16 @@ root_layout = dbc.Container(children=[
     html.Br(),
     html.Br(),
     dbc.Row([
-        dbc.Col('Computador en espera', id='comp_status'),
+        dbc.Col('', id='comp_status'),
         dbc.Col('', id='casillas'),
-        dbc.Col('', id='tablero')
+        dbc.Col(
+            dcc.Loading(
+                      id="loading-1",
+                      className='loader',
+                      type="default",
+                      children=dbc.Row('', id='tablero')
+                      )
+            )
     ]),
     html.Br(),
     dbc.Row(children=[

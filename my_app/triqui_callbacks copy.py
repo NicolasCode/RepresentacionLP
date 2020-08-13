@@ -23,8 +23,10 @@ def register_callbacks(app):
 
     # BOTON-11
     # Pone una X en el boton-11
-    @app.callback(Output('boton-11', 'color'),
-    [Input('boton-11', 'n_clicks')])
+    @app.callback([Output('boton-11', 'color'),
+    Output('boton-11', 'disabled'),#
+    #Output('comp_status', 'children')
+    ], [Input('boton-11', 'n_clicks')])
     def on_button_click(n):
 
         global tablero
@@ -35,8 +37,10 @@ def register_callbacks(app):
             tablero[0, 0] = 2
             return 'secondary', True#, 'Computando jugada...'
     # BOTON-12
-    @app.callback(Output('boton-12', 'color'),
-    [Input('boton-12', 'n_clicks')])
+    @app.callback([Output('boton-12', 'color'),
+    Output('boton-12', 'disabled')#,
+    #Output('comp_status', 'children')
+    ], [Input('boton-12', 'n_clicks')])
     def on_button_click(n):
 
         global tablero
@@ -48,7 +52,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-13
-    @app.callback(Output('boton-13', 'color'),
+    @app.callback([Output('boton-13', 'color'),
+    Output('boton-13', 'disabled')],
     [Input('boton-13', 'n_clicks')])
     def on_button_click(n):
 
@@ -61,7 +66,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-21
-    @app.callback(Output('boton-21', 'color'),
+    @app.callback([Output('boton-21', 'color'),
+    Output('boton-21', 'disabled')],
     [Input('boton-21', 'n_clicks')])
     def on_button_click(n):
 
@@ -74,7 +80,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-22
-    @app.callback(Output('boton-22', 'color'),
+    @app.callback([Output('boton-22', 'color'),
+    Output('boton-22', 'disabled')],
     [Input('boton-22', 'n_clicks')])
     def on_button_click(n):
 
@@ -87,7 +94,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-23
-    @app.callback(Output('boton-23', 'color'),
+    @app.callback([Output('boton-23', 'color'),
+    Output('boton-23', 'disabled')],
     [Input('boton-23', 'n_clicks')])
     def on_button_click(n):
 
@@ -100,7 +108,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-31
-    @app.callback(Output('boton-31', 'color'),
+    @app.callback([Output('boton-31', 'color'),
+    Output('boton-31', 'disabled')],
     [Input('boton-31', 'n_clicks')])
     def on_button_click(n):
 
@@ -113,7 +122,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-32
-    @app.callback(Output('boton-32', 'color'),
+    @app.callback([Output('boton-32', 'color'),
+    Output('boton-32', 'disabled')],
     [Input('boton-32', 'n_clicks')])
     def on_button_click(n):
 
@@ -126,7 +136,8 @@ def register_callbacks(app):
             return 'secondary', True#, 'Computando jugada...'
 
     # BOTON-33
-    @app.callback(Output('boton-33', 'color'),
+    @app.callback([Output('boton-33', 'color'),
+    Output('boton-33', 'disabled')],
     [Input('boton-33', 'n_clicks')])
     def on_button_click(n):
 
@@ -151,18 +162,33 @@ def register_callbacks(app):
     ])
     def frase_final(a,b,c,d,e,f,g,h,i):
 
-        if a or b or c or d or e or f or g or h or i:
-            estado_engine = "..."
+        global contador
+
+        suma = contador
+        if a is not None:
+            suma += a
+        elif b is not None:
+            suma += b
+        elif c is not None:
+            suma += c
+        elif d is not None:
+            suma += d
+        elif e is not None:
+            suma += e
+        elif f is not None:
+            suma += f
+        elif g is not None:
+            suma += g
+        elif h is not None:
+            suma += h
+        elif i is not None:
+            suma += i
+
+        if suma > contador:
+            estado_engine = 'Computando Jugada...' + " " + str(suma) + " " + str(contador)
+            contador = suma
         else:
-            estado_engine = ""
-
-
-
-        # if suma > contador:
-        #     estado_engine = 'Computando Jugada...' + " " + str(suma) + " " + str(contador)
-        #     contador = suma
-        # else:
-        #     estado_engine = 'Computador a la espera'  + " " + str(suma) + " " + str(contador)
+            estado_engine = 'Computador a la espera'  + " " + str(suma) + " " + str(contador)
 
         return estado_engine
 
@@ -176,35 +202,17 @@ def register_callbacks(app):
         Output('boton-23', 'children'),
         Output('boton-31', 'children'),
         Output('boton-32', 'children'),
-        Output('boton-33', 'children'),
-        Output('boton-11', 'disabled'),
-        Output('boton-12', 'disabled'),
-        Output('boton-13', 'disabled'),
-        Output('boton-21', 'disabled'),
-        Output('boton-22', 'disabled'),
-        Output('boton-23', 'disabled'),
-        Output('boton-31', 'disabled'),
-        Output('boton-32', 'disabled'),
-        Output('boton-33', 'disabled'),
-        ],
+        Output('boton-33', 'children')],
         [Input('comp_status', 'children')]
         )
     def computa_jugada(estado):
 
         global tablero
-        btn11_dis = False
-        btn12_dis = False
-        btn13_dis = False
-        btn21_dis = False
-        btn22_dis = False
-        btn23_dis = False
-        btn31_dis = False
-        btn32_dis = False
-        btn33_dis = False
+        global estado_engine
 
-        if estado == '...':
-            if hay_triqui(tablero,0) == 0:
-                if np.count_nonzero(tablero==0) > 0:
+        if estado[:20] == 'Computando Jugada...':
+            if np.count_nonzero(tablero==0) > 0:
+                if hay_triqui(tablero,0) == 0:
                     antiguo_tablero = tablero
                     if game_engine == "DPLL":
                         tablero = jugar_dpll(tablero)
@@ -221,84 +229,26 @@ def register_callbacks(app):
                                     cambio = True
                         tablero = antiguo_tablero
                     mensaje = "Ganan las O" if hay_triqui(tablero,0)==1 else ''
-                    if tablero[0,0] != 0:
-                        btn11_dis = True
-                    if tablero[0,1] != 0:
-                        btn12_dis = True
-                    if tablero[0,2] != 0:
-                        btn13_dis = True
-                    if tablero[1,0] != 0:
-                        btn21_dis = True
-                    if tablero[1,1] != 0:
-                        btn22_dis = True
-                    if tablero[1,2] != 0:
-                        btn23_dis = True
-                    if tablero[2,0] != 0:
-                        btn31_dis = True
-                    if tablero[2,1] != 0:
-                        btn32_dis = True
-                    if tablero[2,2] != 0:
-                        btn33_dis = True
+                    estado_engine = "Computador a la espera"
                     return mensaje, ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
                         ver(tablero[1,0]), ver(tablero[1,1]), ver(tablero[1,2]),\
-                        ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2]),\
-                        btn11_dis, btn12_dis, btn13_dis, btn21_dis, btn22_dis, btn23_dis,\
-                        btn31_dis, btn32_dis, btn33_dis
+                        ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2])
                 else:
-                    if tablero[0,0] != 0:
-                        btn11_dis = True
-                    if tablero[0,1] != 0:
-                        btn12_dis = True
-                    if tablero[0,2] != 0:
-                        btn13_dis = True
-                    if tablero[1,0] != 0:
-                        btn21_dis = True
-                    if tablero[1,1] != 0:
-                        btn22_dis = True
-                    if tablero[1,2] != 0:
-                        btn23_dis = True
-                    if tablero[2,0] != 0:
-                        btn31_dis = True
-                    if tablero[2,1] != 0:
-                        btn32_dis = True
-                    if tablero[2,2] != 0:
-                        btn33_dis = True
-                    return "Empate", ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
+                    estado_engine = "Computador a la espera"
+                    return "Ganan las X", ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
                         ver(tablero[1,0]), ver(tablero[1,1]), ver(tablero[1,2]),\
-                        ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2]),\
-                        btn11_dis, btn12_dis, btn13_dis, btn21_dis, btn22_dis, btn23_dis,\
-                        btn31_dis, btn32_dis, btn33_dis
-            else:
-                if tablero[0,0] != 0:
-                    btn11_dis = True
-                if tablero[0,1] != 0:
-                    btn12_dis = True
-                if tablero[0,2] != 0:
-                    btn13_dis = True
-                if tablero[1,0] != 0:
-                    btn21_dis = True
-                if tablero[1,1] != 0:
-                    btn22_dis = True
-                if tablero[1,2] != 0:
-                    btn23_dis = True
-                if tablero[2,0] != 0:
-                    btn31_dis = True
-                if tablero[2,1] != 0:
-                    btn32_dis = True
-                if tablero[2,2] != 0:
-                    btn33_dis = True
-                return "Ganan las X", ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
-                    ver(tablero[1,0]), ver(tablero[1,1]), ver(tablero[1,2]),\
-                    ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2]),\
-                    btn11_dis, btn12_dis, btn13_dis, btn21_dis, btn22_dis, btn23_dis,\
-                    btn31_dis, btn32_dis, btn33_dis
+                        ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2])
+
+            estado_engine = "Juego terminado"
+            return "Empate", ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
+                ver(tablero[1,0]), ver(tablero[1,1]), ver(tablero[1,2]),\
+                ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2])
 
         tablero = tablero_inicial()
+        estado_engine = "Computador a la espera"
         return '', ver(tablero[0,0]), ver(tablero[0,1]), ver(tablero[0,2]),\
             ver(tablero[1,0]), ver(tablero[1,1]), ver(tablero[1,2]),\
-            ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2]),\
-            btn11_dis, btn12_dis, btn13_dis, btn21_dis, btn22_dis, btn23_dis,\
-            btn31_dis, btn32_dis, btn33_dis
+            ver(tablero[2,0]), ver(tablero[2,1]), ver(tablero[2,2])
 
     @app.callback(
         [Output("modal", "is_open"),Output("resultado", "children")],
