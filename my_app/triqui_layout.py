@@ -79,7 +79,7 @@ root_layout = dbc.Container(children=[
         dbc.Col(html.A(html.Button('Reiniciar'),href='/')),
         dbc.Col(
             dbc.DropdownMenu(
-                label="Seleccione el engine del computador",
+                label="Seleccione el engine",
                 children=[
                     dbc.DropdownMenuItem("DPLL", id="dpll", active=False),
                     dbc.DropdownMenuItem("MinMax", id="minmax", active=True),
@@ -87,6 +87,8 @@ root_layout = dbc.Container(children=[
                 id="engine"
             )
         ),
-        dbc.Col()
+        dbc.Col(
+            dbc.Button("¿Qué es?", id="explica")
+        )
     ])
 ])

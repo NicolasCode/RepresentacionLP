@@ -16,6 +16,8 @@ T = triqui()
 game_engine = "DPLL"
 b1 = 0
 b2 = 0
+e1 = 0
+e2 = 0
 estado_engine = "Computador a la espera"
 contador = 0
 
@@ -203,7 +205,7 @@ def register_callbacks(app):
         btn33_dis = False
 
         if estado == '...':
-            if hay_triqui(tablero,0) == 0:
+            if hay_triqui(tablero) == 0:
                 if np.count_nonzero(tablero==0) > 0:
                     antiguo_tablero = tablero
                     if game_engine == "DPLL":
@@ -220,7 +222,7 @@ def register_callbacks(app):
                                     antiguo_tablero[fila,columna] = 1
                                     cambio = True
                         tablero = antiguo_tablero
-                    mensaje = "Ganan las O" if hay_triqui(tablero,0)==1 else ''
+                    mensaje = "Ganan las O" if hay_triqui(tablero)==1 else ''
                     if tablero[0,0] != 0:
                         btn11_dis = True
                     if tablero[0,1] != 0:
@@ -331,5 +333,29 @@ def register_callbacks(app):
                 b1 = n1
                 b2 = n2
                 return game_engine, False, True
+        if n1:
+            game_engine = "DPLL"
 
         return game_engine, True, False
+
+    @app.callback(
+        [Output("modal1", "is_open"),Output("explicacion", "children")],
+        [Input('explica', 'n_clicks'),Input("close1", "n_clicks")],
+    [State("modal1", "is_open")],
+    )
+    def toggle_modal1(n1, n2, is_open):
+
+        global game_engine
+
+        if game_engine == "DPLL":
+            msg = """
+                Cuando se selecciona el engine DPLL, el proceso de toma de decisiones del computador está basado en el algortimo DPLL (cf. Russell & Norvig (2016), sec. 7.6), el cual es un método de \'model checking\' para fórmulas de la lógica proposicional. Usamos una fórmula que combina 27 letras proposicionales para representar las posiciones del tablero, y mediante ella implementamos la conjunción de cinco reglas de decisión. Las reglas incluyen bloquear el triqui del otro jugador y hacer triqui de ser posible. Este algoritmo, así como la resolución de este tipo de problemas, se estudian en la asignatura \'Lógica para ciencias de la computación\'.
+                """
+        elif game_engine == "Minmax":
+            msg = """
+                 Cuando se selecciona el engine Minmax, el proceso de toma de decisiones del computador está basado en el algoritmo Minmax (cf. Russell & Norvig (2016), sec. 5.2), mediante el cual se crea un árbol de estados, partiendo desde el estado actual del juego, atribuyéndole una utilidad a cada estado con base en los pagos generados por una condición final. Los pagos para el jugador 1 con las $X$ son positivos, y los del jugador 2 con las $O$ son negativos, así que el primero buscará estados que maximicen la utilidad, mientras que el segundo buscará estados que la minimicen. Este algoritmo así como la resolución de juegos competitivos se estudian en la asignatura \'Inteligencia Artificial\'.
+                """
+
+        if n1 or n2:
+            return (not is_open), msg
+        return is_open, msg

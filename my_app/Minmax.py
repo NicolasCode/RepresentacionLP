@@ -159,8 +159,8 @@ def minimax_decision(juego, estado):
             for a in acciones
         ])
 
-    print("El computador juega en:", acciones[indice])
-    print("Tablero resultado:\n", juego.transicion(estado, acciones[indice]))
+    # print("El computador juega en:", acciones[indice])
+    # print("Tablero resultado:\n", juego.transicion(estado, acciones[indice]))
     return acciones[indice]
 
 def jugar_minmax(juego, estado):

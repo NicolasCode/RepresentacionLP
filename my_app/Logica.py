@@ -1,7 +1,13 @@
 import json
-from my_app.DPLL import *
-from my_app.Codificacion import *
-from my_app.FNC import *
+try:
+    from my_app.DPLL import *
+    from my_app.Codificacion import *
+    from my_app.FNC import *
+except:
+    from DPLL import *
+    from Codificacion import *
+    from FNC import *
+
 import numpy as np
 
 Nfilas = 3
@@ -37,15 +43,24 @@ def String2Tree(A):
 
     return Pila[-1]
 
+def Inorder(f):
+    if f.right == None:
+        return f.label
+    elif f.label == '-':
+        return f.label + Inorder(f.right)
+    else:
+        return "(" + Inorder(f.left) + f.label + Inorder(f.right) + ")"
+
+def Inorderp(f):
+    if f.right == None:
+        return "P" + str(Pinv(f.label, Nfilas, Ncolumnas, Nnumeros, Nturnos))
+    elif f.label == '-':
+        return f.label + Inorderp(f.right)
+    else:
+        return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
+
 def interpreta_tablero(tablero):
     inicial = True
-
-    # for l in tablero:
-    #     if inicial:
-    #         letra = [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
-    #         inicial = False
-    #     else:
-    #         letra += [[P(*l, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos)]]
 
     for i in range(3):
         for j in range(3):
@@ -59,14 +74,18 @@ def interpreta_tablero(tablero):
 
 def cargar_reglas(tablero):
     # Cargando reglas
-    with open('my_app/reglas.json', 'r') as file:
-        reglas = json.load(file)
+    try:
+        with open('my_app/reglas.json', 'r') as file:
+            reglas = json.load(file)
+    except:
+        with open('reglas.json', 'r') as file:
+            reglas = json.load(file)
 
-    # rw = list(reglas.keys())
+    rw = list(reglas.keys())
     # rw = ['regla0', 'regla1', 'regla2', 'regla3', 'regla4', 'regla5']
-    rw = ['regla0', 'regla1', 'regla2', 'regla3', 'regla4']
+    # rw = ['regla0', 'regla1', 'regla2', 'regla3', 'regla4']
     # rw = []
-    print("Trabajando con reglas", rw)
+    # print("Trabajando con reglas", rw)
 
     formula = interpreta_tablero(tablero)
 
@@ -79,7 +98,7 @@ def calcular_resultado(formula):
 
     S, I = DPLL(formula, {})
 
-    print(S)
+    # print(S)
     # print(I)
     if S != 'Insatisfacible':
         resultado_turno0 = []
@@ -96,8 +115,8 @@ def calcular_resultado(formula):
                     else:
                         print("Oops!", i, fila)
 
-        #imprime(resultado_turno0)
-        imprime(resultado_turno1)
+        # imprime(resultado_turno0)
+        # imprime(resultado_turno1)
         resultado = np.matrix([[0]*3]*3)
         for l in resultado_turno1:
             resultado[l[0], l[1]] = l[2]
@@ -164,7 +183,8 @@ def regla_ganador():
 
     return A + B + 'O' + C + 'O' + D + 'O'
 
-def tablero2interpretacion(tablero, turno):
+def tablero2interpretacion(tablero):
+    turno = 0
     interps = {}
     for f in range(Nfilas):
         for c in range(Ncolumnas):
@@ -176,6 +196,17 @@ def tablero2interpretacion(tablero, turno):
                 interps[P(f,c,o,1-turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 0
     return interps
 
+def actualiza_interpretacion(tablero, I):
+    turno = 1
+    interps = {}
+    for f in range(Nfilas):
+        for c in range(Ncolumnas):
+            interps[P(f,c,tablero[f,c],turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 1
+            for o in [a for a in range(Nnumeros) if a != tablero[f,c]]:
+                #print(f,c,o,turno)
+                interps[P(f,c,o,turno,Nfilas,Ncolumnas,Nnumeros,Nturnos)] = 0
+    return {**I, **interps}
+
 def V_I(A, I):
     # Devuelve el valor de verdad de A bajo la interpretación I
     # Input: - A, una fórmula en formato tree
@@ -185,18 +216,19 @@ def V_I(A, I):
         return I[A.label]
     elif A.label == '-':
         return 1 - V_I(A.right, I)
-    elif A.label in ['>', 'Y', 'O']:
-        if A.label == 'Y':
-            return V_I(A.left, I) * V_I(A.right, I)
-        elif A.label == 'O':
-            return max(V_I(A.left, I), V_I(A.right, I))
-        elif A.label == '>':
-            return max(1 - V_I(A.left, I), V_I(A.right, I))
+    elif A.label == 'Y':
+        return V_I(A.left, I) * V_I(A.right, I)
+    elif A.label == 'O':
+        return max(V_I(A.left, I), V_I(A.right, I))
+    elif A.label == '>':
+        return max(1 - V_I(A.left, I), V_I(A.right, I))
+    elif A.label == "=":
+        return 1 - (V_I(A.left, I) - V_I(A.right, I))**2
     else:
-        print("Creo que no conozco el conectivo " + str(A.label))
+        print("No conozco el conectivo " + str(A.label))
 
-def hay_triqui(tablero, turno):
-    interpretacion = tablero2interpretacion(tablero, turno)
+def hay_triqui(tablero):
+    interpretacion = tablero2interpretacion(tablero)
     formula = String2Tree(regla_ganador())
     return V_I(formula,interpretacion)
 

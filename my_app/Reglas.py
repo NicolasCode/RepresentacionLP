@@ -1,56 +1,13 @@
 # Crea reglas y pasa a archivo
 from FNC import *
 from Codificacion import *
+from Logica import *
 import json
 
 Nfilas = 3
 Ncolumnas = 3
 Nnumeros = 3 # Se asume que E es 0, O es 1, X es 2
 Nturnos = 2
-
-class Tree(object):
-    def __init__(self, label, left, right):
-        self.left = left
-        self.right = right
-        self.label = label
-
-def String2Tree(A):
-    letrasProposicionales=[chr(x) for x in range(256, 400)]
-    Conectivos = ['O','Y','>','=']
-    Pila = []
-    for c in A:
-        # print("Procesando", c)
-        if c in letrasProposicionales:
-            Pila.append(Tree(c,None,None))
-        elif c=='-':
-            FormulaAux = Tree(c,None,Pila[-1])
-            del Pila[-1]
-            Pila.append(FormulaAux)
-        elif c in Conectivos:
-            FormulaAux = Tree(c,Pila[-1],Pila[-2])
-            del Pila[-1]
-            del Pila[-1]
-            Pila.append(FormulaAux)
-        else:
-            print(u"Hay un problema: el símbolo " + str(c)+ " no se reconoce")
-
-    return Pila[-1]
-
-def Inorder(f):
-    if f.right == None:
-        return f.label
-    elif f.label == '-':
-        return f.label + Inorder(f.right)
-    else:
-        return "(" + Inorder(f.left) + f.label + Inorder(f.right) + ")"
-
-def Inorderp(f):
-    if f.right == None:
-        return "P" + str(Pinv(f.label, Nfilas, Ncolumnas, Nnumeros, Nturnos))
-    elif f.label == '-':
-        return f.label + Inorderp(f.right)
-    else:
-        return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
 
 # Esta regla pone la restriccion de que una casilla no puede tener mas de un numero
 def regla0():
@@ -138,44 +95,60 @@ def regla3():
 # Esta regla indica que se deben bloquear las oportunidades de ganar del otro jugador
 def regla4():
     # Crear restriccion de no tomar en cuenta la regla si es posible ganar
-    # Parte A: Verificar columnas
+    # Parte A: Verificar si se puede ganar por columnas
     inicial = True
     for f in range(Nfilas):
         for c in range(Ncolumnas):
             if inicial:
-                A = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                A = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P(f, (c+2)%3, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
                 inicial = False
             else:
-                A += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+                A += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                     P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                     P(f, (c+2)%3, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
 
-    # Parte B: Verificar filas
+    # Parte B: Verificar si se puede ganar por filas
     inicial = True
     for f in range(Nfilas):
         for c in range(Ncolumnas):
             if inicial:
-                B = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+                B = P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P((f+2)%3, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
                 inicial = False
             else:
-                B += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+                B += P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                     P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                     P((f+2)%3, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
 
-    # Parte C: Verificar diagonal principal
+    # Parte C: Verificar si se puede ganar por diagonal principal
     inicial = True
     for a in range(Nfilas):
         if inicial:
-            C = P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            C = P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((a+2)%3, (a+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                P(a, a, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
             inicial = False
         else:
-            C += P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+            C += P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                 P((a+2)%3, (a+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                 P(a, a, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
 
-    # Parte D: Verificar diagonal secundaria
+    # Parte D: Verificar si se puede ganar por diagonal secundaria
     inicial = True
     for f in range(Nfilas):
         c = 2-f
         if inicial:
-            D = P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
+            D = P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((f-2)%3, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y'
             inicial = False
         else:
-            D += P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
+            D += P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((f-2)%3, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'YO'
 
     restriccion = A + B + 'O' + C + 'O' + D + 'O-'
 
@@ -254,44 +227,68 @@ def regla4():
 
 # Esta regla indica que se debe ganar siempre que sea posible
 def regla5():
-    # Parte A: Rellenar columna
+    # Parte A: Rellenar fila
     inicial = True
     for f in range(Nfilas):
         for c in range(Ncolumnas):
             if inicial:
-                A = P(f, (c+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>'
+                A = P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + \
+                    P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P(f, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>'
                 inicial = False
             else:
-                A += P(f, (c+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>' + 'Y'
+                A += P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + \
+                    P(f, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + \
+                    P(f, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>Y'
 
-    # Parte B: Rellenar fila
+    # Parte B: Rellenar columna
     inicial = True
     for f in range(Nfilas):
         for c in range(Ncolumnas):
             if inicial:
-                B = P((f+2)%3, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>'
+                B = P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + \
+                    P((f+2)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>'
                 inicial = False
             else:
-                B += P((f+2)%3, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>' + 'Y'
+                B += P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P((f+1)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                    P((f+2)%3, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                    P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>Y'
 
     # Parte C: Rellenar diagonal principal
     inicial = True
     for a in range(Nfilas):
         if inicial:
-            C = P((a+2)%3, (a+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>'
+            C = P(a, a, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((a+2)%3, (a+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                P(a, a, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>'
             inicial = False
         else:
-            C += P((a+2)%3, (a+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(a, a, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>' + 'Y'
+            C += P(a, a, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                 P((a+1)%3, (a+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                 P((a+2)%3, (a+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                 P(a, a, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>Y'
 
     # Parte D: Rellenar diagonal secundaria
     inicial = True
     for f in range(Nfilas):
         c = 2-f
         if inicial:
-            D = P((f-2)%3, (c+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>'
+            D = P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                P((f-2)%3, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>'
             inicial = False
         else:
-            D += P((f-2)%3, (c+2)%3, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(f, c, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + '>' + 'Y'
+            D += P(f, c, 1, 1, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                 P((f-1)%3, (c+1)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) +\
+                 P((f-2)%3, (c+2)%3, 1, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' +\
+                 P(f, c, 0, 0, Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y>Y'
 
     # Regla completa y solucion
     return A + B + 'Y' + C + 'Y' + D + 'Y'
@@ -348,6 +345,7 @@ def regla_ganador():
                 D += P(0,2,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + P(1,1,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + P(2,0,n,t,Nfilas, Ncolumnas, Nnumeros, Nturnos) + 'Y' + 'O'
 
     return A + B + 'O' + C + 'O' + D + 'O'
+
 def actualizar_dict(
         r:int,
         letrasB_inicial:int,
@@ -386,22 +384,3 @@ def actualizar_dict(
         print("Forma clausal:", regla)
 
     return regla
-
-######################
-reglas = {}
-letrasProposicionalesA = [chr(x) for x in range(256, 400)]
-letrasB_inicial = 400
-rango = 350
-
-reglas_seleccionadas = [0, 1, 2, 3, 4, 5]
-# reglas_seleccionadas = [0, 1, 2]
-
-for r in reglas_seleccionadas:
-    regla = actualizar_dict(r, letrasB_inicial, rango, letrasProposicionalesA)
-    reglas['regla' + str(r)] = regla
-    letrasB_inicial += rango
-
-with open('reglas.json', 'w') as outfile:
-    json.dump(reglas, outfile)
-
-print("Listas reglas!")

@@ -32,7 +32,19 @@ app.layout = dbc.Container(fluid=True, children=[
     ],
     id="modal",
     centered=True,
-    )
+    ),
+        dbc.Modal(
+        [
+            dbc.ModalHeader("¿En qué consiste este engine?"),
+            dbc.ModalBody("", id="explicacion"),
+            dbc.ModalFooter(children=[
+                dbc.Button("OK", id="close1", className="ml-auto"),
+            ]),
+        ],
+        id="modal1",
+        centered=True,
+        is_open=False,
+        )
 ])
 
 tc.register_callbacks(app)
