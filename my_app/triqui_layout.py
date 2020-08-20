@@ -88,7 +88,7 @@ root_layout = dbc.Container(children=[
             )
         ),
         dbc.Col(
-            dbc.Button("¿Qué es?", id="explica")
+            dbc.Button("¿Qué es?", id="explica", color="primary")
         )
     ])
 ])
